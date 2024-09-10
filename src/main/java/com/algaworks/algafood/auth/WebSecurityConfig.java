@@ -33,11 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/restaurantes/**").permitAll()
 				.anyRequest().authenticated()
-//		Retirando o uso de sessions/cookies
 		.and()
 			.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//		Retirando o uso de csrf		
 		.and()
 			.csrf().disable();
 	}
