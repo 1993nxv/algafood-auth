@@ -27,22 +27,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.roles("GERENTE");
 	}
 	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic()
-			.and()
-			.authorizeRequests()
-				.antMatchers("/restaurantes/**").permitAll()
-				.anyRequest().authenticated()
-//		Retirando o uso de sessions/cookies
-		.and()
-			.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//		Retirando o uso de csrf		
-		.and()
-			.csrf().disable();
-	}
-	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -53,4 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
+
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//			http.csrf().disable()
+//				.authorizeRequests()
+//				.anyRequest().authenticated();
+//	}
 }
