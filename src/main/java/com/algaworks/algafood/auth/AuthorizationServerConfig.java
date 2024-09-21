@@ -33,6 +33,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	@Autowired
+	private JwtKeyStoreProperties jwtKeyStoreProperties;
+
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients
@@ -89,9 +92,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
 //		jwtAccessTokenConverter.setSigningKey("a3B9c1D4e5F6gH7jK8L0mNqR2sT3uVxYz");
 
-		var jksResource = new ClassPathResource("jks/algafood.jks");
-		var keyStorePass = "123456";
-		var keyPairAlias = "algafood";
+		var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
+		var keyStorePass = jwtKeyStoreProperties.getPassword();
+		var keyPairAlias = jwtKeyStoreProperties.getKeyPairAlias();
 
 		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
 		var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
