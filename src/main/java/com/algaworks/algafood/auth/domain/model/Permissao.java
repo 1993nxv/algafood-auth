@@ -3,15 +3,13 @@ package com.algaworks.algafood.auth.domain.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Usuario {
-	
+public class Permissao {
+
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,15 +19,6 @@ public class Usuario {
 	private String nome;
 	
 	@Column(nullable = false)
-	private String email;
+	private String descricao;
 	
-	@Column(nullable = false)
-	private String senha;
-
-	@ManyToMany
-	@JoinTable(name = "usuario_grupo",
-			joinColumns = @JoinColumn(name = "usuario_id"),
-			inverseJoinColumns = @JoinColumn(name ="grupo_id"))
-	private List<Grupo> grupos;
-
 }
