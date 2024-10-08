@@ -110,6 +110,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter(){
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
+//		jwtAccessTokenConverter.setSigningKey("a3B9c1D4e5F6gH7jK8L0mNqR2sT3uVxYz");
+
 		var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
 		var keyStorePass = jwtKeyStoreProperties.getPassword();
 		var keyPairAlias = jwtKeyStoreProperties.getKeyPairAlias();
@@ -118,20 +120,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
 
 		jwtAccessTokenConverter.setKeyPair(keyPair);
+
 		return jwtAccessTokenConverter;
 	}
 
 	private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
-		var pkceAuthorizationCodeTokenGranter = new PkceAuthorizationCodeTokenGranter(
-				endpoints.getTokenServices(),
-				endpoints.getAuthorizationCodeServices(),
-				endpoints.getClientDetailsService(),
-				endpoints.getOAuth2RequestFactory()
-		);
+		var pkceAuthorizationCodeTokenGranter = new PkceAuthorizationCodeTokenGranter(endpoints.getTokenServices(),
+				endpoints.getAuthorizationCodeServices(), endpoints.getClientDetailsService(),
+				endpoints.getOAuth2RequestFactory());
 
 		var granters = Arrays.asList(
-				pkceAuthorizationCodeTokenGranter,
-				endpoints.getTokenGranter());
+				pkceAuthorizationCodeTokenGranter, endpoints.getTokenGranter());
 
 		return new CompositeTokenGranter(granters);
 	}
