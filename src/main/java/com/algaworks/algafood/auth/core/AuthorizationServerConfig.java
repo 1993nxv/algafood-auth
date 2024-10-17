@@ -1,5 +1,8 @@
 package com.algaworks.algafood.auth.core;
 
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +23,13 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import com.nimbusds.jose.jwk.JWKSet;
 
 
 import javax.sql.DataSource;
+import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 
 @Configuration
@@ -82,21 +89,36 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	}
 
 	@Bean
+	public JWKSet jwKset () {
+		RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic())
+				.keyUse(KeyUse.SIGNATURE)
+				.algorithm(JWSAlgorithm.RS256)
+				.keyID("algafood-key-id");
+
+		return new JWKSet(builder.build());
+	}
+
+	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter(){
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//		jwtAccessTokenConverter.setSigningKey("a3B9c1D4e5F6gH7jK8L0mNqR2sT3uVxYz");
 
+		jwtAccessTokenConverter.setKeyPair(keyPair());
+
+		return jwtAccessTokenConverter;
+	}
+
+	private KeyPair keyPair() {
 		var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
 		var keyStorePass = jwtKeyStoreProperties.getPassword();
 		var keyPairAlias = jwtKeyStoreProperties.getKeyPairAlias();
 
-		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
-		var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
+		var keyStoreKeyFactory = new KeyStoreKeyFactory(
+				jksResource,
+				keyStorePass.toCharArray());
 
-		jwtAccessTokenConverter.setKeyPair(keyPair);
-
-		return jwtAccessTokenConverter;
+		return keyStoreKeyFactory.getKeyPair(keyPairAlias);
 	}
+
 
 	private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
 		var pkceAuthorizationCodeTokenGranter = new PkceAuthorizationCodeTokenGranter(endpoints.getTokenServices(),
