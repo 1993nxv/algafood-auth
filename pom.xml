@@ -10,34 +10,18 @@
 	</parent>
 	<groupId>com.algaworks</groupId>
 	<artifactId>algafood-auth</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>algafood-auth</name>
+	<version>1.0</version>
+	<name>algafood-oauth</name>
 	<description>Authorization Server do AlgaFood</description>
 	<url/>
-	
-	<licenses>
-		<license/>
-	</licenses>
-		<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	
+
 	<properties>
-			<maven.compiler.source>11</maven.compiler.source>
-			<maven.compiler.target>11</maven.compiler.target>
-			<maven.compiler.release>11</maven.compiler.release>
-		<java.version>11</java.version>
+		<java.version>12</java.version>
 		<spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
 		<spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
 		<javax-jaxb.version>2.3.1</javax-jaxb.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -48,13 +32,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
 			<version>${spring-security-oauth2.version}</version>
 		</dependency>
-		
+
 		<!-- Correção erro javax.xml.bind.JAXBException -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
@@ -107,7 +91,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
