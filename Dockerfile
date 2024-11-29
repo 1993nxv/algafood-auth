@@ -4,6 +4,6 @@ WORKDIR /oauth
 
 COPY target/*.jar /oauth/algafood-oauth.jar
 
-EXPOSE 8180
+EXPOSE 8181
 
 CMD ["java", "-jar", "algafood-oauth.jar"]
